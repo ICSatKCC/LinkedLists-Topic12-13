@@ -43,3 +43,4 @@ out/
 # OS generated files
 .DS_Store
 Thumbs.db
+target/classes/linkedlists/SLLNode.class

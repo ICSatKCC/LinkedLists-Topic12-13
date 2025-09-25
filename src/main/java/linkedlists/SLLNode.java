@@ -132,14 +132,6 @@ public class SLLNode<T> {
       }
 
 
-        // test with Integer data
-        SLLNode<Integer> inode1 = new SLLNode<Integer>(10);
-        SLLNode<Integer> inode2 = new SLLNode<Integer>(20, inode1);
-        SLLNode<Integer> inode3 = new SLLNode<Integer>(30, inode2);
-        System.out.println("inode3 data: " + inode3.getData());
-        System.out.println("inode3 next data: " + inode3.getNext().getData());
-        System.out.println("inode3 next next data: " + inode3.getNext().getNext().getData());
-        System.out.println("inode3 toString(): " + inode3.toString());
     }
 
 }   // end of class
