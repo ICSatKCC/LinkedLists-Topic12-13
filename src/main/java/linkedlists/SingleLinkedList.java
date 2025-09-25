@@ -251,4 +251,30 @@ public class SingleLinkedList<T> implements List<T> {
         }
         return sb.toString();
     }
+
+    @Override
+    /** Inserts an element at a specific position in the list.
+     * 
+     * @param position the position to insert the element at
+     * @param element the element to insert
+     * @throws ListException if the position is invalid
+     */
+    public void insert(int position, T element) throws ListException {
+        if (position < 0 || position > size) {
+            throw new ListException("Invalid position");
+        }
+        SLLNode<T> newNode = new SLLNode<>(element);
+        if (position == 0) {
+            newNode.next = head;
+            head = newNode;
+        } else {
+            SLLNode<T> current = head;
+            for (int i = 0; i < position - 1; i++) {
+                current = current.next;
+            }
+            newNode.next = current.next;
+            current.next = newNode;
+        }
+        size++;
+    }
 }

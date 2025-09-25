@@ -13,6 +13,26 @@ public interface List<T> {
      */
     void add(T element);
 
+    /** 
+     * Adds an element to the end of the list.
+     * 
+     * @param element the element to be added to the end of the list
+     * Time complexity: O(n) where n is the number of elements in the list
+     */
+
+    void addLast(T element);
+
+    /**
+     * Inserts an element at a specific position in the list.
+     * 
+     * @param position the position to insert the element at
+     * @param element the element to insert
+     * @throws ListException if the position is invalid
+     */
+    void insert(int position, T element) throws ListException;  
+    
+
+
     /** Gets an element from a position in the list.
      * 
      * @param position the position of the element to get
