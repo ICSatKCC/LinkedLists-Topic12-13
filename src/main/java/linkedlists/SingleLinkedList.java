@@ -219,4 +219,36 @@ public class SingleLinkedList<T> implements List<T> {
     public int size() {
         return size;
     }
+
+    @Override
+    /** Retrieves an element from a specific position in the list.
+     * 
+     * @param position the position of the element to retrieve
+     * @return the element at the specified position
+     * @throws ListException if the position is invalid
+     */
+    public T get(int position) throws ListException {
+        if (position < 0 || position >= size) {
+            throw new ListException("Invalid position");
+        }
+        SLLNode<T> current = head;
+        for (int i = 0; i < position; i++) {
+            current = current.next;
+        }
+        return current.data;
+    }
+    /** toString returns a string representation of the elements of the list */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        SLLNode<T> current = head;
+        while (current != null) {
+            sb.append(current.data);
+            if (current.next != null) {
+                sb.append(" -> ");
+            }
+            current = current.next;
+        }
+        return sb.toString();
+    }
 }

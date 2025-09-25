@@ -13,6 +13,14 @@ public interface List<T> {
      */
     void add(T element);
 
+    /** Gets an element from a position in the list.
+     * 
+     * @param position the position of the element to get
+     * @return the element at the specified position
+     * @throws ListException if the position is invalid
+     */
+    T get(int position) throws ListException;
+
     /**
      * Removes an element from the list.
      * 
