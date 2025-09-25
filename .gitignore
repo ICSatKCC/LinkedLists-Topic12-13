@@ -44,3 +44,4 @@ out/
 .DS_Store
 Thumbs.db
 target/classes/linkedlists/SLLNode.class
+.DS_Store
