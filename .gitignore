@@ -45,3 +45,7 @@ out/
 Thumbs.db
 target/classes/linkedlists/*.class
 
+target/classes/linkedlists/ListDriver.class
+target/classes/linkedlists/ListException.class
+target/classes/linkedlists/SingleLinkedList.class
+target/classes/linkedlists/SLLNode.class
