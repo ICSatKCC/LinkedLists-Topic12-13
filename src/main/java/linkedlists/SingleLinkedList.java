@@ -1,5 +1,9 @@
 package linkedlists;
 
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+
 /**
  * A generic singly linked list implementation that stores elements of type T.
  * This class implements the List interface and provides standard list operations
@@ -11,7 +15,7 @@ package linkedlists;
  * @date 9/24/25    
  * @version 1.0
  */
-public class SingleLinkedList<T> implements List<T> {
+public class SingleLinkedList<T> implements List<T>, Iterable<T> {
     /** Reference to the first node in the linked list */
     private SLLNode<T> head;  // points to first node in list
     /** The current number of elements in the list */
@@ -276,5 +280,237 @@ public class SingleLinkedList<T> implements List<T> {
             current.next = newNode;
         }
         size++;
+    }
+
+    /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     * 
+     * @return an iterator over the elements in this list
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new SingleLinkedListIterator();
+    }
+
+    /**
+     * Returns a list iterator over the elements in this list (in proper sequence).
+     * 
+     * @return a list iterator over the elements in this list
+     */
+    public ListIterator<T> listIterator() {
+        return new SingleLinkedListIterator();
+    }
+
+    /**
+     * Returns a list iterator over the elements in this list (in proper sequence),
+     * starting at the specified position in the list.
+     * 
+     * @param index index of the first element to be returned from the list iterator
+     * @return a list iterator over the elements in this list, starting at the specified position
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
+    public ListIterator<T> listIterator(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return new SingleLinkedListIterator(index);
+    }
+
+    /**
+     * Inner class that implements both Iterator and ListIterator for SingleLinkedList.
+     * Note: Due to the singly-linked nature of this list, some ListIterator operations
+     * like previous() and hasPrevious() are not efficiently supported and will throw
+     * UnsupportedOperationException.
+     */
+    private class SingleLinkedListIterator implements ListIterator<T> {
+        private SLLNode<T> current;
+        private SLLNode<T> previous;
+        private int currentIndex;
+        private boolean canRemove;
+        private boolean canSet;
+
+        /**
+         * Constructs an iterator starting at the beginning of the list.
+         */
+        public SingleLinkedListIterator() {
+            this(0);
+        }
+
+        /**
+         * Constructs an iterator starting at the specified index.
+         * 
+         * @param index the starting index for the iterator
+         */
+        public SingleLinkedListIterator(int index) {
+            current = head;
+            previous = null;
+            currentIndex = 0;
+            canRemove = false;
+            canSet = false;
+
+            // Advance to the specified index
+            for (int i = 0; i < index && current != null; i++) {
+                previous = current;
+                current = current.next;
+                currentIndex++;
+            }
+        }
+
+        /**
+         * Returns true if this list iterator has more elements when traversing
+         * the list in the forward direction.
+         * 
+         * @return true if the list iterator has more elements when traversing forward
+         */
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        /**
+         * Returns the next element in the list and advances the cursor position.
+         * 
+         * @return the next element in the list
+         * @throws NoSuchElementException if the iteration has no next element
+         */
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("No next element");
+            }
+            T data = current.data;
+            previous = current;
+            current = current.next;
+            currentIndex++;
+            canRemove = true;
+            canSet = true;
+            return data;
+        }
+
+        /**
+         * Returns true if this list iterator has more elements when traversing
+         * the list in the reverse direction.
+         * Note: This operation is not efficiently supported for singly-linked lists.
+         * 
+         * @return false (not supported for singly-linked lists)
+         */
+        @Override
+        public boolean hasPrevious() {
+            // For a singly-linked list, going backwards is not efficient
+            // We could implement this by traversing from head each time, but it would be O(n)
+            return false;
+        }
+
+        /**
+         * Returns the previous element in the list and moves the cursor position backwards.
+         * Note: This operation is not efficiently supported for singly-linked lists.
+         * 
+         * @throws UnsupportedOperationException always, as this operation is not supported
+         */
+        @Override
+        public T previous() {
+            throw new UnsupportedOperationException("previous() not supported for singly-linked list");
+        }
+
+        /**
+         * Returns the index of the element that would be returned by a subsequent call to next().
+         * 
+         * @return the index of the element that would be returned by next()
+         */
+        @Override
+        public int nextIndex() {
+            return currentIndex;
+        }
+
+        /**
+         * Returns the index of the element that would be returned by a subsequent call to previous().
+         * Note: This operation is not efficiently supported for singly-linked lists.
+         * 
+         * @return the index that would be returned by previous()
+         */
+        @Override
+        public int previousIndex() {
+            return currentIndex - 1;
+        }
+
+        /**
+         * Removes from the list the last element that was returned by next() or previous().
+         * This call can only be made once per call to next() or previous().
+         * 
+         * @throws IllegalStateException if neither next() nor previous() have been called,
+         *         or remove() or add() have been called after the last call to next() or previous()
+         */
+        @Override
+        public void remove() {
+            if (!canRemove) {
+                throw new IllegalStateException("remove() can only be called after next()");
+            }
+            
+            // Remove the element that was just returned by next()
+            if (previous == null) {
+                // We're removing the head
+                head = current;
+            } else {
+                // Find the node before previous and link it to current
+                SLLNode<T> beforePrevious = head;
+                while (beforePrevious != null && beforePrevious.next != previous) {
+                    beforePrevious = beforePrevious.next;
+                }
+                if (beforePrevious != null) {
+                    beforePrevious.next = current;
+                } else {
+                    // Previous was the head
+                    head = current;
+                }
+            }
+            
+            size--;
+            currentIndex--;
+            canRemove = false;
+            canSet = false;
+        }
+
+        /**
+         * Replaces the last element returned by next() or previous() with the specified element.
+         * 
+         * @param e the element with which to replace the last element returned
+         * @throws IllegalStateException if neither next() nor previous() have been called,
+         *         or remove() or add() have been called after the last call to next() or previous()
+         */
+        @Override
+        public void set(T e) {
+            if (!canSet) {
+                throw new IllegalStateException("set() can only be called after next()");
+            }
+            previous.data = e;
+        }
+
+        /**
+         * Inserts the specified element into the list at the current position.
+         * The element is inserted immediately before the element that would be
+         * returned by next(), if any.
+         * 
+         * @param e the element to insert
+         */
+        @Override
+        public void add(T e) {
+            SLLNode<T> newNode = new SLLNode<>(e);
+            
+            if (previous == null) {
+                // Adding at the beginning
+                newNode.next = head;
+                head = newNode;
+            } else {
+                // Adding in the middle or end
+                newNode.next = current;
+                previous.next = newNode;
+            }
+            
+            previous = newNode;
+            size++;
+            currentIndex++;
+            canRemove = false;
+            canSet = false;
+        }
     }
 }

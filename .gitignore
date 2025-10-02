@@ -45,3 +45,4 @@ out/
 Thumbs.db
 target/classes/linkedlists/SLLNode.class
 .DS_Store
+target/classes/linkedlists/List.class
