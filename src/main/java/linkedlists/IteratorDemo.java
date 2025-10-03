@@ -39,6 +39,7 @@ public class IteratorDemo {
         System.out.println();
         
         // Demonstrate enhanced for loop (uses iterator internally)
+        //"For each" loop
         System.out.println("Using enhanced for loop (iterator internally) printing Coin.getName:");
         for (Coin element : list) {
             System.out.println("Element: " + element.getName());
