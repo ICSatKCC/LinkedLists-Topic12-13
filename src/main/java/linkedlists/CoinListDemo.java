@@ -47,6 +47,14 @@ public class CoinListDemo {
             System.out.println("Number of unique coin types: " + coinList.countUniques());
             System.out.println("List is empty: " + coinList.isEmpty());
             System.out.println();
+
+            //for loop using size() and get() methods to display all coins
+            System.out.println("Coins in the list:");
+            for (int i = 0; i < coinList.size(); i++) {
+                Coin coin = coinList.get(i);
+                System.out.println((i + 1) + ". " + coin.getName() );
+            }
+            System.out.println();
             
             // Test contains method
             System.out.println("Testing contains method:");
