@@ -46,3 +46,4 @@ Thumbs.db
 target/classes/linkedlists/*.class
 .DS_Store
 target/classes/linkedlists/SingleLinkedList.class
+target/classes/linkedlists/SingleLinkedList.class
